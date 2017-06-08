@@ -4,8 +4,12 @@ from time import sleep, time
 from shutil import rmtree
 from scipy.misc import imread
 
+IMAGES_FOLDER = 'Images'
+GRAY_IMAGES_FOLDER = 'Gray images'
+SUB_IMAGES_FOLDER = 'Sub-images'
 IMAGE_COLOR = 'L'
 IMAGE_SHAPE = (256, 256)
+SUB_IMAGE_SHAPE = (30, 30)
 IMAGE_FORMAT = 'png'
 
 
@@ -79,11 +83,14 @@ def read_sub_images_file(image_folder_path):
         image_list.append([list(map(int, line.split('\t'))) for line in sub_image_list])
     return image_list
 
+
 def main():
-    images_convert_obj = ImageConvert(path.join('Images', 'Lena'), path.join('Images after changes', 'Lena'),
-                                      IMAGE_SHAPE, IMAGE_FORMAT)
-    images_convert_obj.reduce_and_change_color_from_source_folder(IMAGE_COLOR)
-    images_convert_obj.create_sub_ascii_image(path.join('Images - output', 'Lena images'), (30, 30))
+    for folder_name in listdir(IMAGES_FOLDER):
+        images_convert_obj = ImageConvert(path.join(IMAGES_FOLDER, folder_name),
+                                          path.join(GRAY_IMAGES_FOLDER, folder_name), IMAGE_SHAPE, IMAGE_FORMAT)
+        images_convert_obj.reduce_and_change_color_from_source_folder(IMAGE_COLOR)
+        images_convert_obj.create_sub_ascii_image(path.join(SUB_IMAGES_FOLDER, folder_name), SUB_IMAGE_SHAPE)
+
 
     # Contains in each row the sub-picture derived from the big picture.
     # image_list = read_sub_images_file(r'Images - output\Lena images\lena')
