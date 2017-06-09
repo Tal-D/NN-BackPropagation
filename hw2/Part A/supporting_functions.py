@@ -1,7 +1,20 @@
+from pickle import dump
+
+
+def _gather_network_weights(network):
+    weights_collection = []
+    for neuron in network.hidden_level:
+        weights_collection.append(neuron.weights)
+    for neuron in network.output_layer:
+        weights_collection.append(neuron.weights)
+    return weights_collection
+
+
 def training_neurons_network(network,
                              training_samples,
                              input_neurons,
-                             network_learning_rate):
+                             network_learning_rate,
+                             running_index=1):
     epoch = 1
     stop_network_learning = False
     last_error_rate = 0
@@ -21,6 +34,8 @@ def training_neurons_network(network,
             stop_network_learning = last_error_rate < error_rate
         last_error_rate = error_rate
         epoch += 1
+    trained_network_weights_file_name = "training_run_" + str(running_index) + ".py"
+    dump(_gather_network_weights(network), trained_network_weights_file_name)
 
 
 def normailze_sample_data(data_row):
