@@ -1,4 +1,4 @@
-from pickle import dump
+from pickle import dump, HIGHEST_PROTOCOL
 
 
 def _gather_network_weights(network):
@@ -34,9 +34,10 @@ def training_neurons_network(network,
             stop_network_learning = last_error_rate < error_rate
         last_error_rate = error_rate
         epoch += 1
-    trained_network_weights_file_name = "training_run_" + str(running_index) + ".py"
-    dump(_gather_network_weights(network), trained_network_weights_file_name)
-
+        trained_network_weights_file_name = "training_run_" + str(running_index) + ".pickle"
+        with open(trained_network_weights_file_name, 'wb') as results_file:
+            dump(_gather_network_weights(network), results_file, protocol=HIGHEST_PROTOCOL)
+    
 
 def normailze_sample_data(data_row):
         normalized_data_row = []
